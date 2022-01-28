@@ -1,0 +1,15 @@
+{
+  "name": "crowddev-demo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Jan Halama",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "@superfaceai/one-sdk": "^1.2.1",
+    "dotenv": "^14.3.2"
+  },
+  "devDependencies": {
+    "prettier": "^2.5.1"
+  }
+}

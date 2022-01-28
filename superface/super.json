@@ -1,0 +1,28 @@
+{
+  "profiles": {
+    "social-media/publishing-profiles": {
+      "version": "1.0.0",
+      "priority": ["twitter"],
+      "providers": {
+        "twitter": {}
+      }
+    },
+    "social-media/publish-post": {
+      "version": "1.0.0"
+    },
+    "social-media/followers": {
+      "version": "1.0.0"
+    },
+    "social-media/posts-lookup": {
+      "version": "1.0.0"
+    }
+  },
+  "providers": {
+    "twitter": {
+      "security": [],
+      "parameters": {
+        "accessToken": "$TWITTER_ACCESSTOKEN"
+      }
+    }
+  }
+}
