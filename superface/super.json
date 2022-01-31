@@ -2,7 +2,9 @@
   "profiles": {
     "social-media/publishing-profiles": {
       "version": "1.0.0",
-      "priority": ["twitter"],
+      "priority": [
+        "twitter"
+      ],
       "providers": {
         "twitter": {}
       }
@@ -14,7 +16,13 @@
       "version": "1.0.0"
     },
     "social-media/posts-lookup": {
-      "version": "1.0.0"
+      "version": "1.1.0",
+      "providers": {
+        "twitter": {}
+      },
+      "priority": [
+        "twitter"
+      ]
     }
   },
   "providers": {
