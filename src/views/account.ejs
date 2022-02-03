@@ -1,0 +1,20 @@
+<div id="provider-twitter">
+  <h3>Twitter</h3>
+  <% if (user.twitter) { const {profile, accessToken, refreshToken} =
+  user.twitter %>
+  <p>ID: <%= profile.id %></p>
+  <p>Username: <%= profile.username %></p>
+  <p>Display Name: <%= profile.displayName %></p>
+  <p>
+    Access Token
+    <input type="text" readonly value="<%= accessToken %>" />
+  </p>
+  <p>
+    Refresh Token
+    <input type="text" readonly value="<%= refreshToken %>" />
+  </p>
+  <% } else { %>
+  <p>User is not logged in using Twitter account.</p>
+  <p><a href="/auth/twitter">Login with Twitter</a></p>
+  <% } %>
+</div>
