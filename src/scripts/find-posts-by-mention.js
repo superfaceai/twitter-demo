@@ -1,13 +1,14 @@
 const { inspect } = require('node:util');
 const dotenv = require('dotenv');
 const { SuperfaceClient } = require('@superfaceai/one-sdk');
+const { getTokens } = require('../tokens-utils');
 
 dotenv.config();
 
 const findPostsByHashtag = async (profileId, page) => {
   const sdk = new SuperfaceClient();
 
-  const accessToken = process.env.TWITTER_ACCESSTOKEN;
+  const { accessToken } = getTokens();
 
   try {
     const provider = await sdk.getProvider('twitter');
