@@ -23,6 +23,15 @@
       "priority": [
         "twitter"
       ]
+    },
+    "oauth2/refresh-token": {
+      "version": "1.0.0",
+      "providers": {
+        "twitter": {}
+      },
+      "priority": [
+        "twitter"
+      ]
     }
   },
   "providers": {
