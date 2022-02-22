@@ -1,6 +1,6 @@
 const { inspect } = require('node:util');
 const { SuperfaceClient } = require('@superfaceai/one-sdk');
-const { withAccessToken } = require('../tokens-utils');
+const { withAccessToken } = require('../utils/tokens-utils');
 
 const findPostsByHashtag = async (hashtag) => {
   const sdk = new SuperfaceClient();
