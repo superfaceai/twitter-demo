@@ -1,6 +1,9 @@
 const { inspect } = require('node:util');
 const { SuperfaceClient } = require('@superfaceai/one-sdk');
 const { withAccessToken } = require('../utils/tokens-utils');
+const { paginated } = require('../utils/paginated');
+
+const PAGES_LIMIT = 3;
 
 const findPostsByHashtag = async (hashtag) => {
   const sdk = new SuperfaceClient();
@@ -9,31 +12,24 @@ const findPostsByHashtag = async (hashtag) => {
     const provider = await sdk.getProvider('twitter');
     const profile = await sdk.getProfile('social-media/posts-lookup');
 
-    let page = undefined;
+    const results = paginated(
+      (page) =>
+        withAccessToken((accessToken) =>
+          profile.getUseCase('FindByHashtag').perform(
+            { hashtag, page },
+            {
+              provider,
+              parameters: {
+                accessToken,
+              },
+            }
+          )
+        ),
+      PAGES_LIMIT
+    );
 
-    //read up to 3 pages of posts
-    for (let i = 0; i < 3; i++) {
-      console.error(`Getting page #${i + 1}`);
-      const result = await withAccessToken((accessToken) =>
-        profile.getUseCase('FindByHashtag').perform(
-          { hashtag, page },
-          {
-            provider,
-            parameters: {
-              accessToken,
-            },
-          }
-        )
-      );
-      unwrappedResult = result.unwrap();
-
-      console.log(inspect(result.unwrap(), false, Infinity, true));
-
-      if (!unwrappedResult.nextPage) {
-        break;
-      } else {
-        page = unwrappedResult.nextPage;
-      }
+    for await (const result of results) {
+      console.log(inspect(result, false, Infinity, true));
     }
   } catch (err) {
     console.error(inspect(err, false, Infinity, true));

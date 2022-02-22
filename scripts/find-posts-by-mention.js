@@ -1,6 +1,9 @@
 const { inspect } = require('node:util');
 const { SuperfaceClient } = require('@superfaceai/one-sdk');
 const { withAccessToken } = require('../utils/tokens-utils');
+const { paginated } = require('../utils/paginated');
+
+const PAGES_LIMIT = 3;
 
 const findPostsByMention = async (profileId, page) => {
   const sdk = new SuperfaceClient();
@@ -9,18 +12,25 @@ const findPostsByMention = async (profileId, page) => {
     const provider = await sdk.getProvider('twitter');
     const profile = await sdk.getProfile('social-media/posts-lookup');
 
-    const result = await withAccessToken((accessToken) =>
-      profile.getUseCase('FindByMention').perform(
-        { profileId, page },
-        {
-          provider,
-          parameters: {
-            accessToken,
-          },
-        }
-      )
+    const results = paginated(
+      (page) =>
+        withAccessToken((accessToken) =>
+          profile.getUseCase('FindByMention').perform(
+            { profileId, page },
+            {
+              provider,
+              parameters: {
+                accessToken,
+              },
+            }
+          )
+        ),
+      PAGES_LIMIT
     );
-    console.log(inspect(result.unwrap(), false, Infinity, true));
+
+    for await (const result of results) {
+      console.log(inspect(result, false, Infinity, true));
+    }
   } catch (err) {
     console.error(inspect(err, false, Infinity, true));
   }
