@@ -1,6 +1,7 @@
 async function* paginated(perform, limit = Infinity) {
   let nextPage = undefined;
-  for (let i = 0; nextPage != null && i < limit; i++) {
+  let i = 0;
+  do {
     const result = await perform(nextPage);
     if (result.isErr()) {
       throw result.error;
@@ -8,7 +9,8 @@ async function* paginated(perform, limit = Infinity) {
       nextPage = result.value.nextPage;
       yield result.value;
     }
-  }
+    i++;
+  } while (nextPage != null && i < limit);
 }
 
 module.exports = { paginated };
