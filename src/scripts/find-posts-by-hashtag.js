@@ -1,14 +1,9 @@
 const { inspect } = require('node:util');
-const dotenv = require('dotenv');
 const { SuperfaceClient } = require('@superfaceai/one-sdk');
-const { getTokens } = require('../tokens-utils');
-
-dotenv.config();
+const { withAccessToken } = require('../tokens-utils');
 
 const findPostsByHashtag = async (hashtag) => {
   const sdk = new SuperfaceClient();
-
-  const { accessToken } = getTokens();
 
   try {
     const provider = await sdk.getProvider('twitter');
@@ -18,15 +13,17 @@ const findPostsByHashtag = async (hashtag) => {
 
     //read up to 3 pages of posts
     for (let i = 0; i < 3; i++) {
-      console.log(`Getting page #${i + 1}`);
-      const result = await profile.getUseCase('FindByHashtag').perform(
-        { hashtag, page },
-        {
-          provider,
-          parameters: {
-            accessToken,
-          },
-        }
+      console.error(`Getting page #${i + 1}`);
+      const result = await withAccessToken((accessToken) =>
+        profile.getUseCase('FindByHashtag').perform(
+          { hashtag, page },
+          {
+            provider,
+            parameters: {
+              accessToken,
+            },
+          }
+        )
       );
       unwrappedResult = result.unwrap();
 

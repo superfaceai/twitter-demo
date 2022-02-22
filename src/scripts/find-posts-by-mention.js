@@ -1,26 +1,24 @@
 const { inspect } = require('node:util');
-const dotenv = require('dotenv');
 const { SuperfaceClient } = require('@superfaceai/one-sdk');
-const { getTokens } = require('../tokens-utils');
+const { withAccessToken } = require('../tokens-utils');
 
-dotenv.config();
-
-const findPostsByHashtag = async (profileId, page) => {
+const findPostsByMention = async (profileId, page) => {
   const sdk = new SuperfaceClient();
-
-  const { accessToken } = getTokens();
 
   try {
     const provider = await sdk.getProvider('twitter');
     const profile = await sdk.getProfile('social-media/posts-lookup');
-    const result = await profile.getUseCase('FindByMention').perform(
-      { profileId, page },
-      {
-        provider,
-        parameters: {
-          accessToken,
-        },
-      }
+
+    const result = await withAccessToken((accessToken) =>
+      profile.getUseCase('FindByMention').perform(
+        { profileId, page },
+        {
+          provider,
+          parameters: {
+            accessToken,
+          },
+        }
+      )
     );
     console.log(inspect(result.unwrap(), false, Infinity, true));
   } catch (err) {
@@ -28,6 +26,6 @@ const findPostsByHashtag = async (profileId, page) => {
   }
 };
 
-const profileId = process.argv[2] || '1466796521412771840';
+const profileId = process.argv[2] || '1196797704015400960'; // @superfaceai
 
-findPostsByHashtag(profileId);
+findPostsByMention(profileId);
