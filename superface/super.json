@@ -11,7 +11,7 @@
       "version": "1.0.0",
       "providers": {
         "twitter": {
-          "file": "./social-media/publish-post.twitter.suma"
+          "file": "./grid/social-media/publish-post.twitter.suma"
         }
       },
       "priority": ["twitter"]
@@ -23,9 +23,7 @@
       "version": "1.2.0",
       "priority": ["twitter"],
       "providers": {
-        "twitter": {
-          "file": "./providers/twitter.json"
-        }
+        "twitter": {}
       }
     },
     "oauth2/refresh-token": {
@@ -38,6 +36,7 @@
   },
   "providers": {
     "twitter": {
+      "file": "./providers/twitter.json",
       "security": [],
       "parameters": {
         "accessToken": "$TWITTER_ACCESSTOKEN"

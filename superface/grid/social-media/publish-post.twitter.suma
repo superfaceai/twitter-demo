@@ -1,22 +1,22 @@
-// Facebook Graph API Reference: https://developer.twitter.com/en/docs/twitter-api
+// Twitter API docs:
+// https://developer.twitter.com/en/docs/twitter-api/tweets/manage-tweets/api-reference/post-tweets
+// https://developer.twitter.com/en/docs/twitter-api/v1/media/upload-media/overview
 
 profile = "social-media/publish-post@1.0"
 provider = "twitter"
 
 map PublishPost {
-  return map error if (input.media && input.media.length > 0) {
-    title = "Media publishing not implemented"
-    detail = "Publishing media to Twitter provider is not yet supported."
-  }
+  mediaKeys = call foreach(media of input.media) UploadMedia(media = media, accessToken = parameters.accessToken)
 
   http POST "/2/tweets" {
 
-    request {
+    request "application/json" {
       headers {
         authorization = "Bearer " + parameters.accessToken
       }
       body {
-        text = input.text
+        text = input.text,
+        media = mediaKeys.length > 0 ? {media_ids: mediaKeys} : undefined,
       }
     }
 
@@ -36,7 +36,7 @@ map PublishPost {
 
     response 401 "application/json" {
       map error {
-        title = "Unauthenticated"
+        title = "Unauthorized"
         detail = body.detail
       }
     }
@@ -48,4 +48,35 @@ map PublishPost {
       }
     }
   }
+}
+
+// https://developer.twitter.com/en/docs/twitter-api/v1/media/upload-media/api-reference/post-media-upload
+// FIXME: Uses legacy endpoint due to missing MIME type
+operation UploadMedia {
+  altText = args.media.altText
+  contents = args.media.contents
+
+  // let's assume it's string if it's not a buffer...
+  mediaString = Buffer.isBuffer(contents) ? contents.toString('base64') : contents
+
+  http POST "upload" "/1.1/media/upload.json" {
+    security none
+  
+    request "application/x-www-form-urlencoded" {
+      headers {
+        authorization = "Bearer " + args.accessToken,
+      }
+
+      body {
+        media_data = mediaString,
+        //media = contents,
+      }
+    }
+  
+    response 200 "application/json" {
+      return body.media_id_string
+    }
+  }
+
+  // TODO: Set alt text: https://developer.twitter.com/en/docs/twitter-api/v1/media/upload-media/api-reference/post-media-metadata-create
 }

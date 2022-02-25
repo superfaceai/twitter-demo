@@ -4,6 +4,10 @@
     {
       "id": "default",
       "baseUrl": "https://api.twitter.com"
+    },
+    {
+      "id": "upload",
+      "baseUrl": "https://upload.twitter.com"
     }
   ],
   "parameters": [
