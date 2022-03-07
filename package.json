@@ -10,10 +10,13 @@
   "dependencies": {
     "@superfaceai/one-sdk": "^1.2.1",
     "@superfaceai/passport-twitter-oauth2": "^1.0.0",
+    "cross-fetch": "^3.1.5",
     "dotenv": "^14.3.2",
     "express": "^4.17.2",
     "express-session": "^1.17.2",
-    "passport": "^0.5.2"
+    "oauth-header": "^1.1.0",
+    "passport": "^0.5.2",
+    "passport-twitter": "^1.0.4"
   },
   "devDependencies": {
     "nodemon": "^2.0.15",
