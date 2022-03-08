@@ -61,14 +61,19 @@ async function refreshToken() {
 /**
  * Passes current access token to the passed `perform` function and retries it with refreshed token if any exception occurs.
  */
-async function withAccessToken(perform) {
+async function withAccessToken(perform, attemptRefresh = true) {
   const tokens = await getTokens();
+  const result = await perform(tokens.accessToken);
+  if (result.isOk() || !attemptRefresh) {
+    return result;
+  }
+  console.error('Error, refreshing token', result.error);
   try {
-    return await perform(tokens.accessToken);
-  } catch (err) {
-    console.error('Error, refreshing token', err);
     const { accessToken } = refreshToken();
-    return await perform(accessToken);
+    return perform(accessToken);
+  } catch (err) {
+    console.error('Failed to refresh tokens', err);
+    throw err;
   }
 }
 
