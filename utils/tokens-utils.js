@@ -72,4 +72,4 @@ async function withAccessToken(perform) {
   }
 }
 
-module.exports = { withAccessToken };
+module.exports = { withAccessToken, getTokens };
