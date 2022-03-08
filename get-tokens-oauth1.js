@@ -4,14 +4,6 @@ const passport = require('passport');
 const TwitterStrategy = require('passport-twitter');
 const session = require('express-session');
 
-const SCOPES = [
-  'tweet.read',
-  'tweet.write',
-  'users.read',
-  'follows.read',
-  'offline.access',
-];
-
 const EXIT_ON_SUCCESS = true;
 
 require('dotenv').config();
@@ -24,11 +16,11 @@ passport.deserializeUser(function (obj, done) {
   done(null, obj);
 });
 
-function onAuthSuccess({ accessToken, refreshToken }) {
+function onAuthSuccess(payload) {
   if (process.stdout.isTTY) {
     console.error(`\nPaste this into "tokens.json" file:`);
   }
-  console.log(JSON.stringify({ accessToken, refreshToken }));
+  console.log(JSON.stringify(payload));
   if (EXIT_ON_SUCCESS) {
     setTimeout(() => {
       process.exit();
@@ -44,8 +36,8 @@ passport.use(
       consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
       callbackURL: `${process.env.BASE_URL}/auth/twitter/callback`,
     },
-    (accessToken, refreshToken, profile, done) => {
-      onAuthSuccess({ accessToken, refreshToken });
+    (token, tokenSecret, profile, done) => {
+      onAuthSuccess({ token, tokenSecret });
       return done(null, {
         displayName: profile.displayName,
       });
