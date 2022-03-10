@@ -32,7 +32,7 @@ Alternatively run `get-tokens.js` script and paste the generated JSON manually.
 ### Run demo scripts
 
 ```shell
-node scripts/publishing-profile.js # get publishing profiles (Twitter user profile)
+node scripts/publishing-profiles.js # get publishing profiles (Twitter user profile)
 
 node scripts/followers.js 1466796521412771840 # get followers - pass profileId as parameter
 
