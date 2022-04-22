@@ -69,13 +69,15 @@ app.get(
   '/auth/twitter',
   passport.authenticate('twitter', {
     scope: SCOPES,
-    state: false,
   })
 );
 
 app.get(
   '/auth/twitter/callback',
-  passport.authenticate('twitter', { failureRedirect: '/error?login' }),
+  passport.authenticate('twitter', {
+    failureRedirect: '/error?login',
+    failureMessage: true,
+  }),
   function (req, res) {
     res.end(
       '<h1>Authentication succeeded</h1>See the console for the initial access and refresh tokens.<br>You can close this page.'
@@ -84,7 +86,11 @@ app.get(
 );
 
 app.get('/error', (req, res, next) => {
-  next(new Error('Login failure'));
+  res.send(
+    `<h1>Login error</h1>${req.session.messages?.join(
+      '<br>'
+    )}<br><a href='/'>Try again?</a>`
+  );
 });
 
 // error handler
