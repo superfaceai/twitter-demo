@@ -2,7 +2,7 @@
 
 ## Setup
 
-1. `yarn install`
+1. `npm i`
 2. `cp .env.example .env`
 3. set Twitter credentials in .env file (see below)
 4. get Access and Refresh tokens (see below)
@@ -22,7 +22,7 @@ You need to obtain Twitter application ID and secret. We recommend to try the de
 
 This repository contains an HTTP server which implements OAuth authorization flow. Upon successful authorization, it will output the tokens in a JSON string, stored in `tokens.json` file:
 
-1. Run `yarn start`
+1. Run `npm start`
 2. Visit `http://localhost:3000`
 3. Authorize application to access your account
 4. The `tokens.json` file should be created

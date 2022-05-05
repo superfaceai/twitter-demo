@@ -1,7 +1,7 @@
 {
-  "name": "superface-twitter-demo",
+  "name": "@superfaceai/twitter-demo",
   "version": "1.0.0",
-  "author": "Jan Halama",
+  "author": "Superface <hello@superface.ai>",
   "license": "MIT",
   "private": true,
   "scripts": {
